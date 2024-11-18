@@ -25,6 +25,7 @@ export class Login extends Component {
     const action = this.props.action;
     switch (action) {
       case LoginActions.Login:
+        console.log(this.getReturnUrl())
         this.login(this.getReturnUrl());
         break;
       case LoginActions.LoginCallback:

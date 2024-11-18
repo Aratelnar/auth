@@ -1,49 +1,52 @@
 export const ApplicationName = "Photos SPA";
 
 export const QueryParameterNames = {
-  ReturnUrl: "returnUrl",
-  Message: "message",
+    ReturnUrl: "returnUrl",
+    Message: "message",
 };
 
 export const LoginActions = {
-  Login: "login",
-  LoginCallback: "TODO: путь куда возвращать после логина на сервере авторизации",
-  LoginFailed: "login-failed",
-  Profile: "profile",
-  Register: "register",
+    Login: "login",
+    LoginCallback: "login-callback",
+    LoginFailed: "login-failed",
+    Profile: "profile",
+    Register: "register",
 };
 
 export const LogoutActions = {
-  Logout: "logout",
-  LogoutCallback: "TODO: путь куда возвращать после выхода на сервере авторизации",
-  LoggedOut: "logged-out",
+    Logout: "logout",
+    LogoutCallback: "logout-callback",
+    LoggedOut: "logged-out",
 };
 
 const prefix = "/authentication";
 
 export const ApplicationPaths = {
-  ApiAuthorizationPrefix: prefix,
+    ApiAuthorizationPrefix: prefix,
 
-  Login: `${prefix}/${LoginActions.Login}`,
-  LoginCallback: `${prefix}/${LoginActions.LoginCallback}`,
-  LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
-  Register: `${prefix}/${LoginActions.Register}`,
-  Profile: `${prefix}/${LoginActions.Profile}`,
-  LogOut: `${prefix}/${LogoutActions.Logout}`,
-  LogOutCallback: `${prefix}/${LogoutActions.LogoutCallback}`,
-  LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,
-  RegisterRedirectUrl: "TODO: полный url куда отправлять для регистрации",
-  ProfileRedirectUrl: "TODO: полный url куда отправлять для просмотра и редактирования профиля",
+    Login: `${prefix}/${LoginActions.Login}`,
+    LoginCallback: `${prefix}/${LoginActions.LoginCallback}`,
+    LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
+    Register: `${prefix}/${LoginActions.Register}`,
+    Profile: `${prefix}/${LoginActions.Profile}`,
+    LogOut: `${prefix}/${LogoutActions.Logout}`,
+    LogOutCallback: `${prefix}/${LogoutActions.LogoutCallback}`,
+    LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,
+    RegisterRedirectUrl: "https://localhost:7001/",
+    ProfileRedirectUrl: "https://localhost:7001/diagnostics/",
 };
 
 export const ApiAuthorizationClientConfiguration = {
-  // обязательные настройки
-  authority: "TODO: адрес сервера авторизации",
-  client_id: "TODO: идентификатор клиента",
-  redirect_uri: "TODO: полный URL куда возвращать после логина на сервере авторизации",
-  post_logout_redirect_uri: "TODO: полный URL куда возвращать после выхода на сервере авторизации",
-  response_type: "TODO: желаемый тип ответа от сервера авторизации",
-  scope: "TODO: запросить все доступные скоупы",
-  // опциональные настройки
-  // https://github.com/IdentityModel/oidc-client-js/wiki#other-optional-settings
+    // обязательные настройки
+    authority: "https://localhost:7001/",
+    client_id: "Photos SPA",
+    redirect_uri: "https://localhost:8001" + ApplicationPaths.LoginCallback,
+    post_logout_redirect_uri: "https://localhost:8001" + ApplicationPaths.LogOutCallback,
+    response_type: "code",
+    scope: "openid profile email photos",
+    // опциональные настройки
+    // https://github.com/IdentityModel/oidc-client-js/wiki#other-optional-settings
+    automaticSilentRenew: true, // Пытаться ли автоматически обновлять access token перед истечением срока его действия
+    accessTokenExpiringNotificationTime: 30, // За сколько секунд до истечения срока действия access token делать попытку его обновления
+    includeIdTokenInSilentRenew: true, // Включать ли id_token в качестве id_token_hint при вызовах silent renew
 };

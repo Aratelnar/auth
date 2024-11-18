@@ -37,6 +37,7 @@ namespace PhotosApp.Services
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
+            return;
             if (env.IsDevelopment())
             {
                 var message = new StringBuilder();

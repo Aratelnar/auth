@@ -15,24 +15,23 @@ namespace PhotosApp.Services
 
         public string HashPassword(TUser user, string password)
         {
-            byte[] saltBytes = GenerateSaltBytes();
-            byte[] hashBytes = GetHashBytes(password, saltBytes);
-            byte[] hashedPasswordBytes = ConcatenateBytes(saltBytes, hashBytes);
-            string hashedPassword = Convert.ToBase64String(hashedPasswordBytes);
+            var saltBytes = GenerateSaltBytes();
+            var hashBytes = GetHashBytes(password, saltBytes);
+            var hashedPasswordBytes = ConcatenateBytes(saltBytes, hashBytes);
+            var hashedPassword = Convert.ToBase64String(hashedPasswordBytes);
             return hashedPassword;
         }
 
         public PasswordVerificationResult VerifyHashedPassword(TUser user,
             string hashedPassword, string providedPassword)
         {
-            byte[] expectedHashBytes = null;
-            byte[] actualHashBytes = null;
-
-            throw new NotImplementedException();
-
+            var expectedHashBytes = Convert.FromBase64String(hashedPassword);
+            var saltBytes = expectedHashBytes[..(SaltSizeInBits / 8)];
+            var actualHashBytes = ConcatenateBytes(saltBytes, GetHashBytes(providedPassword, saltBytes));
+            
             // Если providedPassword корректен, то в результате хэширования его с той же самой солью,
             // что и оригинальный пароль, должен получаться тот же самый хэш.
-            return AreByteArraysEqual(actualHashBytes, expectedHashBytes)
+            return AreByteArraysEqual(expectedHashBytes, actualHashBytes)
                 ? PasswordVerificationResult.Success
                 : PasswordVerificationResult.Failed;
         }
@@ -40,10 +39,8 @@ namespace PhotosApp.Services
         private byte[] GenerateSaltBytes()
         {
             byte[] saltBytes = new byte[SaltSizeInBits / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(saltBytes);
-            }
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(saltBytes);
             return saltBytes;
         }
 
